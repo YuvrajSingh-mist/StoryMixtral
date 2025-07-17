@@ -3,6 +3,10 @@
 
 A PyTorch implementation of a Mixtral inspired transformer model with Mixture of Experts (MoE), Flash Attention, and other advanced features.
 
+## Examples
+
+Provided under the `generated_data/` directory, these examples showcase the model's capabilities in text generation and understanding.
+
 ![StoryMixtral Model](images/image.png)
 
 ## 📊 Training Results & Model Weights
