@@ -141,6 +141,13 @@ torchrun --nproc_per_node=8 trainer.py
 
 ### Inference with Gradio
 
+**HF_TOKEN** should be set in `config.py` to use the Gradio interface. Moreover, set your token as follows:
+
+```python
+ export HF_TOKEN=<TOKEN_HERE>
+```
+
+
 ```bash
 # Run the Gradio app
 cd gradio
