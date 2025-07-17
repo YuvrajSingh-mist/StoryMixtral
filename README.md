@@ -7,7 +7,7 @@ A PyTorch implementation of a Mixtral inspired transformer model with Mixture of
 
 ## 📊 Training Results & Model Weights
 
-**📈 View Training Report**: [StoryMixtral Training Results on WandB](https://wandb.ai/rentio/Mixtral-DDP-Pretrain-10-billion-tokens)
+**📈 View Training Report**: [StoryMixtral Training Results on WandB](https://wandb.ai/rentio/Mixtral-DDP-Pretrain-10-billion-tokens/reports/StoryMixtral--VmlldzoxMzYyNzc0OQ?accessToken=nybd4lxybsbq5k5fh2dqjcucdawilt3fossn583wv6jiu8tbdzcybiihe7rhsqmq)
 
 **💾 Download Pre-trained Weights**: 
 - **Hugging Face Model**: [YuvrajSingh9886/StoryMixtral](https://huggingface.co/YuvrajSingh9886/StoryMixtral)
@@ -177,6 +177,8 @@ StoryMixtral/
 ├── images/           # Project images
 └── old/             # Original files
 ```
+
+
 
 ## Training Features
 
