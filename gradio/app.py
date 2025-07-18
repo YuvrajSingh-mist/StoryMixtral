@@ -43,12 +43,23 @@ def load_model(checkpoint_path=None, hf_token=None):
         dropout=model_args.dropout,
         no_of_decoder_layers=model_args.no_of_decoder_layers,
         vocab_size=model_args.vocab_size,
-        device=device
+        device=device,
+        tokenizer=tokenizer
     )
     
     if checkpoint_path and os.path.exists(checkpoint_path):
         checkpoint = torch.load(checkpoint_path, map_location=device)
-        model.load_state_dict(checkpoint['MODEL_STATE'])
+        
+        # Remove _orig_mod prefix from checkpoint keys if present
+        state_dict = checkpoint['MODEL_STATE']
+        if any(key.startswith('_orig_mod.') for key in state_dict.keys()):
+            new_state_dict = {}
+            for key, value in state_dict.items():
+                new_key = key.replace('_orig_mod.', '') if key.startswith('_orig_mod.') else key
+                new_state_dict[new_key] = value
+            state_dict = new_state_dict
+        
+        model.load_state_dict(state_dict)
         print(f"Loaded model from {checkpoint_path}")
     else:
         print("No checkpoint provided, using randomly initialized model")
@@ -136,7 +147,7 @@ if __name__ == "__main__":
     initialize_components(hf_token)
     
     # Try to load model on startup
-    checkpoint_path = "./checkpoints/snapshot_18000.pt"  # Adjust path as needed
+    checkpoint_path = "/mnt/c/Users/yuvra/OneDrive/Desktop/Work/pytorch/StoryMixtral/StoryMixtral/checkpoints/snapshot_18000.pt"  # Adjust path as needed
     load_model(checkpoint_path, hf_token)
     
     demo.launch(

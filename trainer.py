@@ -109,7 +109,8 @@ def train(model_args=None, hf_token=None):
     if model_args is None:
         model_args = create_model_args(hf_token=hf_token)
     
-    tokenizer = Tokenizer().ready_tokenizer()
+    # Use the tokenizer from model_args instead of creating a new one
+    tokenizer = model_args.tokenizer
     
     # print("dtype: ", model_args.dtype)
     # device='cuda:0'
@@ -133,7 +134,8 @@ def train(model_args=None, hf_token=None):
         dropout=model_args.dropout, 
         no_of_decoder_layers=model_args.no_of_decoder_layers, 
         vocab_size=model_args.vocab_size, 
-        device=model_args.device
+        device=model_args.device,
+        tokenizer=tokenizer
     )
     
     # print(f"Model on device {device} is ready")

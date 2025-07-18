@@ -42,7 +42,7 @@ def get_args():
     parser.add_argument('--attn_dropout', type=float, default=0.1, help='Attention dropout rate')
     
     # System Configuration
-    parser.add_argument('--device', type=str, default='cuda:9', help='Device to use (cuda/cpu)')
+    parser.add_argument('--device', type=str, default='cuda', help='Device to use (cuda/cpu)')
     parser.add_argument('--use_checkpointing', action='store_true', default=False, help='Use gradient checkpointing')
     parser.add_argument('--use_liger', action='store_true', default=True, help='Use Liger kernels for optimization')
     parser.add_argument('--use_flash_attention', action='store_true', default=True, help='Use Flash Attention')

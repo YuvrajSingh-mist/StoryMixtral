@@ -9,9 +9,10 @@ from liger_kernel.transformers import LigerLayerNorm
 from liger_kernel.transformers import LigerSwiGLUMLP
 from liger_kernel.transformers import liger_rotary_pos_emb
 from liger_kernel.transformers import LigerFusedLinearCrossEntropyLoss
-from config import ModelArgs
+from config import create_model_args
 
-model_args = ModelArgs()
+# Create default model args instance
+model_args = create_model_args()
 # import numpy as np
 class RotaryEmbeddings(nn.Module):
     def __init__(
@@ -409,10 +410,14 @@ class Mixtral(nn.Module):
         dropout = model_args.dropout,
         no_of_decoder_layers = model_args.no_of_decoder_layers,
         vocab_size = model_args.vocab_size,
-        device = model_args.device
+        device = model_args.device,
+        tokenizer = None
     ):
         super().__init__()
 
+        # Store tokenizer for use in loss calculation
+        self.tokenizer = tokenizer
+        
         # self.positional_embeddings = nn.Parameter(torch.randn(1, block_size, embeddings_dims, device=device), requires_grad=True) #To give positional embeddings to each token of the input text, hence num_embeddings=block_size
         # torch.nn.init.kaiming_normal_(self.positional_embeddings)
         self.text_embds = TextEmbeddings(vocab_size=vocab_size, embeddings_dims=embeddings_dims, device=device)
@@ -420,10 +425,13 @@ class Mixtral(nn.Module):
         self.layer_norm = LayerNormalization(embeddings_dims=embeddings_dims)
         self.decoder_layers = nn.ModuleList([TransformerDecoderBlock(attn_dropout=attn_dropout, embeddings_dims=embeddings_dims, no_of_heads=no_of_heads, dropout=dropout, vocab_size=vocab_size, device=device) for _ in range(no_of_decoder_layers)])
         self.apply(self.kaiming_init_weights)
-        self.le_loss = LigerFusedLinearCrossEntropyLoss(
-            ignore_index=tokenizer.pad_token_id
-        ).to(model_args.device)
-
+        
+        # Initialize loss function with tokenizer pad token id if tokenizer is provided
+        if self.tokenizer is not None:
+            self.le_loss = LigerFusedLinearCrossEntropyLoss(
+                ignore_index=self.tokenizer.pad_token_id
+            ).to(model_args.device)
+       
     def kaiming_init_weights(self, m):
         if isinstance(m, nn.Linear):
             torch.nn.init.kaiming_normal_(m.weight)
